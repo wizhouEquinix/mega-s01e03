@@ -1,6 +1,7 @@
-// One problem per thing engineering has to fix. Built on causes.ts, plus the reports the desk
-// read as a one-day move (desk-notes.json): those are not a month flip, so they get their own row
-// instead of a footnote under the cause their tenant points at.
+// One problem per thing engineering has to fix. Built on causes.ts, counted the desk's way: every
+// report where it is filed (its cause, by tenant). The reports the desk read as a one-day move
+// (desk-notes.json) stay counted under the cause they are filed under, and also get their own row,
+// because they need their own fix.
 import { groupByCause, uniqueById, type Report, type Tenant } from '#lib/kb/causes';
 
 export type Problem = 'parser' | 'hint' | 'one-day-move';
@@ -30,9 +31,8 @@ export function problemsOf(
 ): ProblemGroup[] {
   const merged = uniqueById(all).filter((r) => r.mergedInto === ticket);
   const moved = merged.filter((r) => oneDayMove.includes(r.id));
-  const rest = merged.filter((r) => !oneDayMove.includes(r.id));
   const groups: { problem: ProblemGroup['problem']; reports: Report[] }[] = [
-    ...groupByCause(rest, tenantOf).map((g) => ({ problem: g.cause, reports: g.reports })),
+    ...groupByCause(merged, tenantOf).map((g) => ({ problem: g.cause, reports: g.reports })),
     ...(moved.length ? [{ problem: 'one-day-move' as const, reports: moved }] : []),
   ];
   return groups

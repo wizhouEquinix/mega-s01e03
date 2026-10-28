@@ -33,7 +33,8 @@ The queued parser fix closes only the first row. The other two keep coming in af
 
 - **One report, one id.** The export pages overlap, so some reports come twice. They are counted once (`uniqueById`).
 - **The tenant decides, not intake.** `meta.intakeTag` is a guess from the reporter's browser. The cause comes from the tenant's locale and booking form (`causeOf` in `causes.ts`).
-- **A one-day move is not a flip.** The reports the desk read as a one-day move (`desk-notes.json`) leave the parser row and get their own. A month flip swaps day and month; these keep the month and lose a day.
+- **Counted where filed.** Every report counts under the cause it is filed under, as in the desk's own view of #4471.
+- **A one-day move is not a flip.** The reports the desk read as a one-day move (`desk-notes.json`) are filed under the parser by tenant, but a month flip swaps day and month; these keep the month and lose a day. They get their own row and issue, so the parser fix is not expected to close them.
 
 ## Why the merge hid them
 

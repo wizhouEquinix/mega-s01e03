@@ -1,7 +1,7 @@
 <script lang="ts">
   import reports from '#lib/data/reports-4471.json';
   import notes from '#lib/data/desk-notes.json';
-  import type { Report } from '#lib/kb/causes';
+  import { uniqueById, type Report } from '#lib/kb/causes';
   import { tenantOf } from '#lib/kb/locales';
   import { PROBLEMS, problemsOf, type Problem } from '#lib/kb/problems';
 
@@ -9,7 +9,9 @@
   let { ticket, issues = {} }: { ticket: number; issues?: Partial<Record<Problem, string>> } = $props();
 
   const groups = $derived(problemsOf(reports as Report[], ticket, tenantOf, notes.oneDayMove));
-  const total = $derived(groups.reduce((n, g) => n + g.reports.length, 0));
+  const total = $derived(uniqueById(reports as Report[]).filter((r) => r.mergedInto === ticket).length);
+  const moved = $derived(groups.find((g) => g.problem === 'one-day-move'));
+  const filedUnder = $derived(moved ? groups.filter((g) => g.problem !== 'one-day-move' && g.reports.some((r) => moved.reports.includes(r))) : []);
   const issueNo = (url?: string) => (url ? `#${url.split('/').pop()}` : 'no issue yet');
 </script>
 
@@ -42,8 +44,15 @@
   </tbody>
 </table>
 
+{#if moved}
+  {#each filedUnder as g (g.problem)}
+    <p class="note">{g.reports.filter((r) => moved.reports.includes(r)).length} of the <code>{g.problem}</code> reports are the <code>one-day-move</code> row: counted where they are filed, and tracked in its own issue too.</p>
+  {/each}
+{/if}
+
 <style>
   .sum { font-size: 1.1rem; }
+  .note { color: var(--muted); font-size: 0.85em; }
   .what { color: var(--muted); font-size: 0.85em; }
   .none, .loose td { color: var(--warn); font-weight: 600; }
 </style>

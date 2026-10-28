@@ -4,7 +4,7 @@ title: '#4471 · three problems, not one'
 owner: wizhouEquinix
 status: open
 reviewed: 2026-10-28
-signature: wizhouEquinix
+signature: 'v1.eyJzdWIiOiI1NzQxIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyMTEzMjAsImV4cCI6MTc5MzI5NzcyMH0.3_JPlEIVsjXBWupYRmeg-lhBVb3CSgrcv9Nt_lxB_TE'
 issues:
   parser: https://github.com/wizhouEquinix/mega-s01e03/issues/1
   hint: https://github.com/wizhouEquinix/mega-s01e03/issues/2

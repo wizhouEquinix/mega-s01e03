@@ -17,12 +17,21 @@ issues:
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-[#4471](/kb/incidents/4471) is marked known: one issue, one fix queued. Its own table says
+[#4471](/kb/incidents/4471) was marked known: one issue, one fix queued. Its own table says
 otherwise. The reports in it come from three problems, and each one needs its own fix, so each
-one now has its own issue.
+one has its own issue.
+
+## Where each one stands
+
+Engineering closed #4471 on 5 October:
+
+- `parser`: **fixed** (`fix(dates): parse dd/mm for eu locales`). Its issue is closed.
+- `hint`: **won't fix**, because the booking-v3 form is retired. Its issue is closed as not planned.
+- `one-day-move`: **no fix yet.** Neither change touches it. Its issue stays open.
 
 <Callout kind="warn">
-The queued parser fix closes only the first row. The other two keep coming in after it ships.
+Closing #4471 does not close the one-day moves. They are not a month flip, so the parser fix
+does not reach them. Watch for more of them.
 </Callout>
 
 ## The problems in #4471

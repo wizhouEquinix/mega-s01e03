@@ -1,0 +1,44 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: wizhouEquinix
+status: open
+reviewed: 2026-10-28
+signature: wizhouEquinix
+issues:
+  parser: https://github.com/wizhouEquinix/mega-s01e03/issues/1
+  hint: https://github.com/wizhouEquinix/mega-s01e03/issues/2
+  one-day-move: https://github.com/wizhouEquinix/mega-s01e03/issues/3
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) is marked known: one issue, one fix queued. Its own table says
+otherwise. The reports in it come from three problems, and each one needs its own fix, so each
+one now has its own issue.
+
+<Callout kind="warn">
+The queued parser fix closes only the first row. The other two keep coming in after it ships.
+</Callout>
+
+## The problems in #4471
+
+<ProblemTable ticket={4471} {issues} />
+
+## How each report was placed
+
+- **One report, one id.** The export pages overlap, so some reports come twice. They are counted once (`uniqueById`).
+- **The tenant decides, not intake.** `meta.intakeTag` is a guess from the reporter's browser. The cause comes from the tenant's locale and booking form (`causeOf` in `causes.ts`).
+- **A one-day move is not a flip.** The reports the desk read as a one-day move (`desk-notes.json`) leave the parser row and get their own. A month flip swaps day and month; these keep the month and lose a day.
+
+## Why the merge hid them
+
+Decision [0001](/kb/decisions/0001-dedupe-by-subject) merges on subject line alone. Every one of
+these reports says "wrong day" in some form, so all three problems landed in one ticket. The
+fix is not to edit that decision; it is to read the cause before closing a big ticket as known.
+
+<RenderStamp {signature} />
